@@ -1,0 +1,1928 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>宁酸勿碱？临床上酸中毒何时补碱？</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f59e0b;
+            --accent-color: #ef4444;
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-300: #cbd5e1;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            --neutral-900: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--neutral-800);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        .serif-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(239, 68, 68, 0.8) 100%);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            max-height: 70vh;
+            overflow-y: auto;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid var(--neutral-200);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-content {
+            margin-left: 320px;
+            max-width: 900px;
+        }
+        
+        .case-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .citation-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-color);
+            transition: all 0.2s ease;
+        }
+        
+        .citation-link:hover {
+            background-color: var(--neutral-100);
+            border-bottom-style: solid;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--neutral-200);
+        }
+        
+        @media (max-width: 1280px) {
+            .toc-fixed {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+        
+        /* Mermaid Chart Styles */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid var(--neutral-200);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* 防止触摸设备上的默认行为 */
+            -webkit-user-select: none; /* 防止文本选择 */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--neutral-700);
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: var(--neutral-50);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Enhanced Mermaid theme overrides for better contrast */
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            stroke-width: 2px !important;
+        }
+        
+        .mermaid .node .label {
+            color: var(--neutral-800) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+        
+        .mermaid .edgeLabel {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            color: var(--neutral-700) !important;
+            font-weight: 500 !important;
+            padding: 4px 8px !important;
+            border-radius: 4px !important;
+            border: 1px solid var(--neutral-200) !important;
+        }
+        
+        .mermaid .edge-pattern-solid {
+            stroke: var(--neutral-600) !important;
+            stroke-width: 2px !important;
+        }
+        
+        /* Ensure node text contrast for different colors */
+        .mermaid .node[style*="fill:#2563eb"] .label,
+        .mermaid .node[style*="fill:#dc2626"] .label {
+            color: white !important;
+            font-weight: 700 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .mermaid .node[style*="fill:#f59e0b"] .label,
+        .mermaid .node[style*="fill:#059669"] .label,
+        .mermaid .node[style*="fill:#ffffff"] .label,
+        .mermaid .node[style*="fill:#f8fafc"] .label {
+            color: var(--neutral-800) !important;
+            font-weight: 600 !important;
+        }
+        
+        @media (max-width: 1024px) {
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+  <base target="_blank">
+</head>
+
+  <body class="min-h-screen">
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed">
+      <div class="p-6">
+        <h3 class="serif-display text-lg font-semibold text-gray-800 mb-4">目录导航</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="#hero" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">引言</a>
+          </li>
+          <li>
+            <a href="#case-1" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例1：94岁肺炎心梗患者</a>
+          </li>
+          <li>
+            <a href="#case-2" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例2：95岁COPD患者</a>
+          </li>
+          <li>
+            <a href="#case-3" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例3：96岁多系统疾病患者</a>
+          </li>
+          <li>
+            <a href="#case-4" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例4：87岁骨折肺炎患者</a>
+          </li>
+          <li>
+            <a href="#case-5" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例5：87岁CKD患者</a>
+          </li>
+          <li>
+            <a href="#case-6" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">案例6：97岁终末期肾病</a>
+          </li>
+          <li>
+            <a href="#analysis-framework" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">血气分析四步法</a>
+          </li>
+          <li>
+            <a href="#treatment-guidelines" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">治疗指南总结</a>
+          </li>
+          <li>
+            <a href="#conclusion" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-gray-700 transition-colors">结论与建议</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content px-4 md:px-8 py-12">
+      <!-- Hero Section -->
+      <section id="hero" class="mb-16">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+          <div class="hero-overlay absolute inset-0"></div>
+          <img src="https://kimi-web-img.moonshot.cn/img/www.radiometer.cn/27c41d6fabe009f439a0fde0219d33d25e4134b5.jpg" alt="医院实验室中的血气分析仪设备" class="absolute inset-0 w-full h-full object-cover opacity-20" size="wallpaper" aspect="wide" style="photo" query="血气分析仪" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+
+          <div class="relative z-10 p-8 md:p-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+              <div class="lg:col-span-2">
+                <h1 class="serif-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                  <em class="text-amber-300">宁酸勿碱？</em>
+                  <br/>
+                  临床上酸中毒何时补碱？
+                </h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed">
+                  基于真实临床案例的老年患者酸碱平衡管理策略分析
+                </p>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-300">
+                  <span class="flex items-center"><i class="fas fa-user-md mr-2"></i>老年医学科</span>
+                  <span class="flex items-center"><i class="fas fa-chart-line mr-2"></i>临床决策分析</span>
+                  <span class="flex items-center"><i class="fas fa-graduation-cap mr-2"></i>循证医学</span>
+                </div>
+              </div>
+
+              <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <h3 class="serif-display text-xl font-semibold text-white mb-4">核心要点</h3>
+                <ul class="space-y-3 text-gray-200">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                    <span>血气分析四步法精准诊断</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-exclamation-triangle text-amber-400 mr-3 mt-1"></i>
+                    <span>补碱指征与风险评估</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-balance-scale text-blue-400 mr-3 mt-1"></i>
+                    <span>个体化治疗策略制定</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case 1 -->
+      <section id="case-1" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">1</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例1：94岁肺炎心梗患者</h2>
+              <p class="text-gray-600">酸碱状态评估与碳酸氢钠使用决策</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">患者基本信息</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <div class="space-y-3">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">年龄</span>
+                    <span class="font-medium">94岁</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">性别</span>
+                    <span class="font-medium">男</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">诊断</span>
+                    <span class="font-medium">肺炎、急性心梗、心衰</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">入院时间</span>
+                    <span class="font-medium">2025年11月21日</span>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">关键检查结果</h3>
+              <div class="space-y-4">
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-amber-800 mb-2">动脉血气分析 (12月2日)</h4>
+                  <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span class="text-gray-600">pH:</span>
+                      <span class="font-medium text-red-600">7.33 ↓</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-600">PaCO₂:</span>
+                      <span class="font-medium">45.0 mmHg</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-600">HCO₃⁻:</span>
+                      <span class="font-medium">23.7 mmol/L</span>
+                    </div>
+                    <div>
+                      <span class="text-gray-600">BE:</span>
+                      <span class="font-medium">-2.4 mmol/L</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-blue-800 mb-2">生化指标</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>肌酐</span>
+                      <span class="font-medium text-red-600">174.8 ↑ μmol/L</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>eGFR</span>
+                      <span class="font-medium text-red-600">28.04 ml/min</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>白蛋白</span>
+                      <span class="font-medium text-red-600">32.0 ↓ g/L</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">核心问题</h3>
+              <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-6">
+                <p class="text-lg font-medium text-red-800 mb-2">
+                  <i class="fas fa-question-circle mr-2"></i>
+                  目前适合服用碳酸氢钠吗？
+                </p>
+                <p class="text-red-700">该患者pH 7.33，存在轻度酸血症，是否需要补碱治疗？</p>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">临床决策分析</h3>
+              <div class="space-y-6">
+                <div class="highlight-box p-6 rounded-xl">
+                  <h4 class="font-semibold text-amber-800 mb-3">
+                    <i class="fas fa-microscope mr-2"></i>
+                    酸碱状态精确评估
+                  </h4>
+                  <div class="space-y-3 text-sm">
+                    <div class="flex items-start">
+                      <i class="fas fa-arrow-right text-amber-600 mr-2 mt-1"></i>
+                      <div>
+                        <strong>主要问题：</strong>呼吸功能处于代偿边缘，pH 7.33提示CO₂轻度潴留倾向
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-check-circle text-green-600 mr-2 mt-1"></i>
+                      <div>
+                        <strong>明确排除：</strong>无代谢性酸中毒（HCO₃⁻正常、乳酸正常、AG偏低）
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-green-800 mb-2">
+                    <i class="fas fa-thumbs-up mr-2"></i>
+                    结论：目前不适合使用碳酸氢钠
+                  </h4>
+                  <div class="space-y-2 text-sm text-green-700">
+                    <p>• 缺乏应用指征：无代谢性酸中毒</p>
+                    <p>• 潜在风险明确：可能加重CO₂潴留和心脏负荷</p>
+                    <p>• 治疗重点：控制感染、利尿、纠正低蛋白血症</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case 2 -->
+      <section id="case-2" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">2</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例2：95岁COPD患者</h2>
+              <p class="text-gray-600">呼吸性酸中毒的补碱风险评估</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">病情概述</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <p class="text-gray-700 mb-4">
+                  患者因&#34;反复咳嗽咳痰30余年，加重1周&#34;入院，诊断为慢性阻塞性肺病伴急性下呼吸道感染。
+                </p>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span class="text-gray-600">基础疾病：</span>
+                    <div class="font-medium">COPD、冠心病、高血压、糖尿病</div>
+                  </div>
+                  <div>
+                    <span class="text-gray-600">肾功能：</span>
+                    <div class="font-medium text-red-600">CKD 4期 (eGFR &lt; 15)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mb-6">
+                  <h4 class="font-semibold text-red-800 mb-2">关键转折点</h4>
+                  <p class="text-red-700 text-sm">
+                    11月1日突发气喘，呼吸困难，血气分析显示pH 7.29，PaCO₂ 66.0 mmHg，予以碳酸氢钠50ml静滴。
+                    随后出现意识模糊，最终抢救无效死亡。
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">血气分析解读</h3>
+                <div class="space-y-4">
+                  <div class="chart-container p-6 mb-6">
+                    <div>
+                      <h4 class="font-semibold text-gray-800 mb-4">11月1日血气结果</h4>
+                      <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                          <span class="font-medium">pH</span>
+                          <span class="text-red-600 font-bold">7.29 ↓</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                          <span class="font-medium">PaCO₂</span>
+                          <span class="text-orange-600 font-bold">66.0 ↑</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                          <span class="font-medium">HCO₃⁻</span>
+                          <span class="text-blue-600 font-bold">31.7 ↑</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                          <span class="font-medium">BE</span>
+                          <span class="text-green-600 font-bold">+4.1 ↑</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="highlight-box p-6 rounded-xl">
+                    <h4 class="font-semibold text-amber-800 mb-3">
+                      <i class="fas fa-exclamation-triangle mr-2"></i>
+                      病理生理分析
+                    </h4>
+                    <div class="space-y-3 text-sm">
+                      <p><strong>诊断：</strong>慢性呼吸性酸中毒急性加重，伴完全性代偿</p>
+                      <p><strong>误区：</strong>误将代偿性HCO₃⁻升高当作需要纠正的&#34;代谢性碱中毒&#34;</p>
+                      <p><strong>风险：</strong>静脉补碱必然加重CO₂潴留，制造无法排出的废物</p>
+                    </div>
+                  </div>
+
+                  <div class="bg-red-100 border border-red-300 rounded-xl p-6">
+                    <h4 class="font-semibold text-red-800 mb-3">
+                      <i class="fas fa-times-circle mr-2"></i>
+                      结论：不恰当的治疗决策
+                    </h4>
+                    <div class="space-y-2 text-sm text-red-700">
+                      <p>• 违反基本病理生理原则</p>
+                      <p>• 未触及核心病理环节（通气障碍）</p>
+                      <p>• 必然带来有害副作用</p>
+                      <p>• 分散了关键治疗资源</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
+
+      <!-- Case 3 -->
+      <section id="case-3" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">3</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例3：96岁多系统疾病患者</h2>
+              <p class="text-gray-600">复杂临床情境下的补碱决策</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">病情摘要</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <p class="text-gray-700 text-sm mb-4">
+                  因&#34;嗜睡、纳差伴低血压2天&#34;入院，伴有冠心病、肾功能不全、前列腺肿瘤、右肾肿块等多种基础疾病。
+                </p>
+                <div class="space-y-2 text-sm">
+                  <div class="flex items-center">
+                    <i class="fas fa-heart text-red-500 mr-2"></i>
+                    <span>冠心病、陈旧性心梗</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-kidneys text-blue-500 mr-2"></i>
+                    <span>慢性肾功能不全</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-tint text-purple-500 mr-2"></i>
+                    <span>高血压、糖尿病</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                <h4 class="font-semibold text-blue-800 mb-2">关键发现</h4>
+                <div class="space-y-1 text-sm text-blue-700">
+                  <p>• 双侧肾盂及输尿管扩张积水</p>
+                  <p>• 尿路梗阻导致酸中毒加重</p>
+                  <p>• 心功能处于失代偿边缘</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">实验室数据</h3>
+              <div class="space-y-4">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-red-800 mb-3">血气分析</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>pH</span>
+                      <span class="font-medium text-red-600">7.35</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>HCO₃⁻</span>
+                      <span class="font-medium text-red-600">13.8 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>BE</span>
+                      <span class="font-medium text-red-600">-10.5 ↓</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-blue-800 mb-3">肾功能</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>肌酐</span>
+                      <span class="font-medium text-blue-600">452 ↑</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>尿素</span>
+                      <span class="font-medium text-blue-600">24.6 ↑</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>proBNP</span>
+                      <span class="font-medium text-blue-600">28700 ↑</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-amber-800 mb-3">其他</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>血压</span>
+                      <span class="font-medium">85/51 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>CRP</span>
+                      <span class="font-medium text-amber-600">61 ↑</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">决策分析</h3>
+              <div class="space-y-6">
+                <div class="highlight-box p-6 rounded-xl">
+                  <h4 class="font-semibold text-amber-800 mb-3">
+                    <i class="fas fa-balance-scale mr-2"></i>
+                    指征与风险权衡
+                  </h4>
+                  <div class="space-y-4 text-sm">
+                    <div class="bg-green-50 p-3 rounded-lg">
+                      <strong class="text-green-800">支持补碱：</strong>
+                      <ul class="text-green-700 mt-1 space-y-1">
+                        <li>• 明确代谢性酸中毒</li>
+                        <li>• 肾性酸中毒为主要病因</li>
+                        <li>• 酸中毒可能抑制心肌</li>
+                      </ul>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded-lg">
+                      <strong class="text-red-800">反对补碱：</strong>
+                      <ul class="text-red-700 mt-1 space-y-1">
+                        <li>• 心力衰竭风险极高</li>
+                        <li>• 酸中毒程度尚可耐受</li>
+                        <li>• 存在矛盾性酸中毒风险</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-green-100 border border-green-300 rounded-xl p-6">
+                  <h4 class="font-semibold text-green-800 mb-3">
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    推荐策略：治本为先
+                  </h4>
+                  <div class="space-y-3 text-sm text-green-700">
+                    <p><strong>第一优先：</strong>解除肾后性梗阻（泌尿外科会诊）</p>
+                    <p><strong>第二考虑：</strong>优化灌注（谨慎补液）</p>
+                    <p><strong>最后选择：</strong>小剂量口服补碱</p>
+                    <p><strong>理想方案：</strong>争取CRRT治疗</p>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-blue-800 mb-2">治疗方案排序</h4>
+                  <ol class="text-sm text-blue-700 space-y-1">
+                    <li>1. 解除尿路梗阻</li>
+                    <li>2. 控制感染</li>
+                    <li>3. 谨慎补液</li>
+                    <li>4. 口服补碱</li>
+                    <li>5. 静脉补碱（最后选择）</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case 4 -->
+      <section id="case-4" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">4</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例4：87岁骨折肺炎患者</h2>
+              <p class="text-gray-600">急性呼吸性酸中毒的补碱策略</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">患者概况</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <div class="space-y-3">
+                  <div class="flex items-center">
+                    <i class="fas fa-user text-blue-500 mr-3"></i>
+                    <span><strong>史天卫</strong>，87岁男性</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-stethoscope text-green-500 mr-3"></i>
+                    <span>主诉：咳嗽咳痰1周，外伤后右侧胸痛2天</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-clipboard-list text-purple-500 mr-3"></i>
+                    <span>诊断：社区获得性肺炎，右侧多发肋骨骨折</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-teal-50 border-l-4 border-teal-400 p-4 rounded-r-lg mb-6">
+                <h4 class="font-semibold text-teal-800 mb-2">基础疾病</h4>
+                <div class="space-y-1 text-sm text-teal-700">
+                  <p>• 冠心病（支架植入后）</p>
+                  <p>• 高血压病3级（极高危）</p>
+                  <p>• 高尿酸血症</p>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">血气分析解读</h3>
+              <div class="bg-white border border-gray-200 rounded-xl p-6">
+                <h4 class="font-semibold text-gray-800 mb-4">初始血气（11月28日）</h4>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                    <span class="font-medium">pH</span>
+                    <span class="text-red-600 font-bold">7.30 ↓</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                    <span class="font-medium">PCO₂</span>
+                    <span class="text-orange-600 font-bold">46.3 ↑</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                    <span class="font-medium">HCO₃⁻</span>
+                    <span class="text-yellow-600 font-bold">22.2</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="font-medium">Cl⁻</span>
+                    <span class="text-blue-600 font-bold">112 ↑</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">Winter公式分析</h3>
+              <div class="highlight-box p-6 rounded-xl mb-6">
+                <h4 class="font-semibold text-amber-800 mb-4">
+                  <i class="fas fa-calculator mr-2"></i>
+                  急性呼吸性酸中毒代偿评估
+                </h4>
+                <div class="space-y-3 text-sm">
+                  <div class="bg-white p-4 rounded-lg">
+                    <p class="font-medium mb-2">计算步骤：</p>
+                    <div class="space-y-1 text-gray-700">
+                      <p>ΔPaCO₂ = 46.3 - 40 = 6.3 mmHg</p>
+                      <p>预期HCO₃⁻ = 24 + 0.1 × ΔPaCO₂</p>
+                      <p>= 24 + 0.1 × 6.3 = 24.6 mmol/L</p>
+                    </div>
+                  </div>
+                  <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <p class="font-medium text-red-800 mb-2">结果解读：</p>
+                    <p class="text-red-700">实测HCO₃⁻ 22.2 &lt; 预期值24.6</p>
+                        <p class="text-red-700">诊断：<strong>急性呼吸性酸中毒合并代谢性酸中毒</strong></p>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">治疗决策</h3>
+              <div class="space-y-6">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-yellow-800 mb-3">
+                    <i class="fas fa-pills mr-2"></i>
+                    医嘱：碳酸氢钠片 0.5g tid
+                  </h4>
+                  <div class="space-y-3 text-sm text-yellow-700">
+                    <p><strong>当前评估：</strong>暂不启动，优先处理原发病</p>
+                    <p><strong>理由：</strong>首要矛盾是急性呼吸性酸中毒，补碱可能加重CO₂潴留</p>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-6">
+                  <h4 class="font-semibold text-blue-800 mb-2">正确处理次序</h4>
+                  <div class="space-y-2 text-sm text-blue-700">
+                    <p><strong>A.</strong> 治本：加强抗感染、有效镇痛</p>
+                    <p><strong>B.</strong> 再评估：24-48小时后复查血气</p>
+                    <p><strong>C.</strong> 小剂量起始：如必要从0.3g bid开始</p>
+                  </div>
+                </div>
+
+                <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-green-800 mb-3">
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    教学要点
+                  </h4>
+                  <div class="space-y-2 text-sm text-green-700">
+                    <p>• 治疗血气异常必须先定性后定量</p>
+                    <p>• 慢性代偿与急性失衡是不同的概念</p>
+                    <p>• 在通气问题解决前，碳酸氢钠是呼吸性酸中毒的&#34;毒药&#34;</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case 5 -->
+      <section id="case-5" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">5</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例5：87岁CKD患者</h2>
+              <p class="text-gray-600">慢性肾脏病代谢性酸中毒的规范治疗</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">患者特征</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <div class="space-y-3">
+                  <div class="flex items-center">
+                    <i class="fas fa-male text-blue-500 mr-3"></i>
+                    <span>87岁男性，多系统疾病</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-heart text-red-500 mr-3"></i>
+                    <span>冠心病、支架植入后、心功能II-III级</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-kidneys text-blue-500 mr-3"></i>
+                    <span>慢性肾功能不全（CKD 3期）</span>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">关键数据</h3>
+              <div class="space-y-4">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-red-800 mb-3">血气分析 (11月12日)</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>pH</span>
+                      <span class="text-red-600 font-bold">7.31 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>PCO₂</span>
+                      <span class="text-blue-600 font-bold">29 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>HCO₃⁻</span>
+                      <span class="text-red-600 font-bold">14.6 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>BE</span>
+                      <span class="text-red-600 font-bold">-10.4 ↓</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-blue-800 mb-3">肾功能</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>肌酐</span>
+                      <span class="text-blue-600 font-bold">141.9 ↑</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>eGFR</span>
+                      <span class="text-blue-600 font-bold">37.98 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>胱抑素C</span>
+                      <span class="text-blue-600 font-bold">1.99 ↑</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">诊断确认</h3>
+              <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-r-lg mb-6">
+                <h4 class="font-semibold text-green-800 mb-3">
+                  <i class="fas fa-check-circle mr-2"></i>
+                  CKD相关的代谢性酸中毒
+                </h4>
+                <div class="space-y-3 text-sm text-green-700">
+                  <p><strong>类型：</strong>部分代偿的正常阴离子间隙型</p>
+                  <p><strong>依据：</strong>pH 7.31, HCO₃⁻ 14.6, AG正常</p>
+                  <p><strong>代偿：</strong>PCO₂ 29（符合预期代偿）</p>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">治疗方案</h3>
+              <div class="space-y-6">
+                <div class="bg-red-100 border border-red-300 rounded-xl p-6">
+                  <h4 class="font-semibold text-red-800 mb-3">
+                    <i class="fas fa-times-circle mr-2"></i>
+                    为何不适合静脉补碱？
+                  </h4>
+                  <div class="space-y-3 text-sm text-red-700">
+                    <div class="bg-red-50 p-3 rounded-lg">
+                      <strong class="text-red-800">指南依据：</strong>
+                      <ul class="mt-1 space-y-1">
+                        <li>• KDIGO 2022：静脉仅用于pH&lt;7.15-7.20&lt; /li&gt;
+                        </li><li>• 中国共识：轻度酸中毒首选口服</li>
+                      </ul>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded-lg">
+                      <strong class="text-red-800">患者风险：</strong>
+                      <ul class="mt-1 space-y-1">
+                        <li>• 容量负荷过重与心衰风险</li>
+                        <li>• 电解质紊乱风险</li>
+                        <li>• 反跳性碱中毒风险</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-blue-800 mb-3">
+                    <i class="fas fa-pills mr-2"></i>
+                    推荐：口服碱剂治疗
+                  </h4>
+                  <div class="space-y-4 text-sm text-blue-700">
+                    <div class="bg-white p-4 rounded-lg">
+                      <strong class="text-blue-800">启动期：</strong>
+                      <p>碳酸氢钠片 0.5g bid-tid</p>
+                      <p class="text-xs text-gray-600">随餐服用减轻胃肠不适</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg">
+                      <strong class="text-blue-800">目标：</strong>
+                      <p>2-4周内HCO₃⁻提升至22-24</p>
+                      <p class="text-xs text-gray-600">切忌纠正过快</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-green-800 mb-3">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    监测计划
+                  </h4>
+                  <div class="space-y-3 text-sm text-green-700">
+                    <div class="flex items-start">
+                      <i class="fas fa-clock text-green-600 mr-2 mt-1"></i>
+                      <div>
+                        <strong>短期（1-2周）：</strong>
+                        <p>血气、电解质、肾功能</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-calendar text-green-600 mr-2 mt-1"></i>
+                      <div>
+                        <strong>长期（稳定后）：</strong>
+                        <p>每1-3个月监测</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <i class="fas fa-heart text-green-600 mr-2 mt-1"></i>
+                      <div>
+                        <strong>重点关注：</strong>
+                        <p>血压、体重、水肿、心衰症状</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Case 6 -->
+      <section id="case-6" class="mb-16">
+        <div class="case-card rounded-2xl p-8 mb-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center mr-4">
+              <span class="text-white font-bold text-lg">6</span>
+            </div>
+            <div>
+              <h2 class="serif-display text-2xl font-semibold text-gray-800">案例6：97岁终末期肾病</h2>
+              <p class="text-gray-600">高龄患者代谢性酸中毒的纠酸决策</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">患者背景</h3>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                <div class="space-y-3">
+                  <div class="flex items-center">
+                    <i class="fas fa-venus text-pink-500 mr-3"></i>
+                    <span>97岁女性，保守治疗取向</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-kidneys text-red-500 mr-3"></i>
+                    <span>CKD 20年，终末期（G5期）</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-user-slash text-gray-500 mr-3"></i>
+                    <span>拒绝透析、拒绝胃管</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-bullseye text-blue-500 mr-3"></i>
+                    <span>缓和医疗为主</span>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">危急数据</h3>
+              <div class="space-y-4">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-red-800 mb-3">肾功能</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>肌酐</span>
+                      <span class="text-red-600 font-bold">314 ↑</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>eGFR</span>
+                      <span class="text-red-600 font-bold">6-7 ↓↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>尿素</span>
+                      <span class="text-red-600 font-bold">58.4 ↑↑</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-orange-50 border border-orange-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-orange-800 mb-3">酸碱状态</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>HCO₃⁻</span>
+                      <span class="text-orange-600 font-bold">14.4 ↓↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>pH (历史)</span>
+                      <span class="text-orange-600 font-bold">7.35 ↑</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <h4 class="font-semibold text-yellow-800 mb-3">电解质紊乱</h4>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                      <span>钠</span>
+                      <span class="text-yellow-600 font-bold">134 ↓</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>镁</span>
+                      <span class="text-yellow-600 font-bold">0.23 ↓↓</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">临床困境</h3>
+              <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg mb-6">
+                <h4 class="font-semibold text-red-800 mb-3">
+                  <i class="fas fa-exclamation-triangle mr-2"></i>
+                  决策矛盾
+                </h4>
+                <div class="space-y-3 text-sm text-red-700">
+                  <p><strong>明确指征：</strong>HCO₃⁻ 14.4 &lt; 18，符合KDIGO治疗标准</p>
+                  <p><strong>极高风险：</strong>高龄、终末期肾病、心功能不全</p>
+                  <p><strong>治疗目标：</strong>缓解症状 vs 纠正指标</p>
+                </div>
+              </div>
+
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">决策分析</h3>
+              <div class="space-y-6">
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-blue-800 mb-3">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    风险评估：当前处方的安全性
+                  </h4>
+                  <div class="space-y-3 text-sm text-blue-700">
+                    <div class="bg-white p-3 rounded-lg">
+                      <strong class="text-blue-800">剂量问题：</strong>
+                      <p>125ml 5% NaHCO₃含HCO₃⁻ 75mmol</p>
+                      <p class="text-red-600">理论上可使HCO₃⁻骤升5.5-6.8</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                      <strong class="text-blue-800">速度问题：</strong>
+                      <p>滴速约150 mmol/h</p>
+                      <p class="text-red-600">远超指南推荐（≤1 mmol/kg/h）</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-green-800 mb-3">
+                    <i class="fas fa-heart mr-2"></i>
+                    以患者为中心的沟通
+                  </h4>
+                  <div class="space-y-3 text-sm text-green-700">
+                    <p><strong>沟通要点：</strong></p>
+                    <ul class="space-y-1 ml-4">
+                      <li>• 治疗可能缓解不舒服症状</li>
+                      <li>• 但存在加重心脏负担的风险</li>
+                      <li>• 需要非常小心地观察</li>
+                    </ul>
+                    <p><strong>确认意愿：</strong>在告知风险/获益后确认家属选择</p>
+                  </div>
+                </div>
+
+                <div class="bg-purple-50 border border-purple-200 rounded-xl p-6">
+                  <h4 class="font-semibold text-purple-800 mb-3">
+                    <i class="fas fa-user-md mr-2"></i>
+                    优化给药方案
+                  </h4>
+                  <div class="space-y-3 text-sm text-purple-700">
+                    <div class="bg-white p-3 rounded-lg">
+                      <strong class="text-purple-800">剂量调整：</strong>
+                      <p>减至30-50 mmol HCO₃⁻</p>
+                      <p>（50-85ml 5% NaHCO₃）</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                      <strong class="text-purple-800">配制方式：</strong>
+                      <p>稀释至等渗（1.4%）</p>
+                      <p>微量泵控制速度≤15 mmol/h</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg">
+                      <strong class="text-purple-800">联合治疗：</strong>
+                      <p>预防性使用小剂量袢利尿剂</p>
+                      <p>同步纠正低镁血症</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analysis Framework -->
+      <section id="analysis-framework" class="mb-16">
+        <div class="bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 mb-8">
+          <h2 class="serif-display text-3xl font-semibold text-gray-800 mb-8 text-center">
+            <i class="fas fa-microscope mr-3 text-blue-600"></i>
+            血气分析四步法临床思维
+          </h2>
+
+          <div class="mermaid-container">
+            <div class="mermaid-controls">
+              <button class="mermaid-control-btn zoom-in" title="放大">
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <button class="mermaid-control-btn zoom-out" title="缩小">
+                <i class="fas fa-search-minus"></i>
+              </button>
+              <button class="mermaid-control-btn reset-zoom" title="重置">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </button>
+              <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+            <div class="mermaid" id="mermaid-chart">
+              flowchart TD
+              A[&#34;pH值分析&#34;] --&gt; B{&#34;pH &lt; 7.35?&#34;}
+              B --&gt;|&#34;是&#34;| C[&#34;酸血症&#34;]
+              B --&gt;|&#34;否&#34;| D{&#34;pH &gt; 7.45?&#34;}
+              D --&gt;|&#34;是&#34;| E[&#34;碱血症&#34;]
+              D --&gt;|&#34;否&#34;| F[&#34;正常或混合性&#34;]
+
+              C --&gt; G[&#34;PaCO₂分析&#34;]
+              G --&gt; H{&#34;PaCO₂ &gt; 45?&#34;}
+              H --&gt;|&#34;是&#34;| I[&#34;呼吸性酸中毒&#34;]
+              H --&gt;|&#34;否&#34;| J[&#34;代谢性酸中毒&#34;]
+
+              E --&gt; K[&#34;PaCO₂分析&#34;]
+              K --&gt; L{&#34;PaCO₂ &lt; 35?&#34;}
+              L --&gt;|&#34;是&#34;| M[&#34;呼吸性碱中毒&#34;]
+              L --&gt;|&#34;否&#34;| N[&#34;代谢性碱中毒&#34;]
+
+              I --&gt; O[&#34;计算预期HCO₃⁻&#34;]
+              J --&gt; O
+              M --&gt; P[&#34;计算预期HCO₃⁻&#34;]
+              N --&gt; P
+
+              O --&gt; Q{&#34;实测HCO₃⁻ = 预期?&#34;}
+              Q --&gt;|&#34;是&#34;| R[&#34;单纯性失衡&#34;]
+              Q --&gt;|&#34;否&#34;| S[&#34;混合性失衡&#34;]
+
+              P --&gt; T{&#34;实测HCO₃⁻ = 预期?&#34;}
+              T --&gt;|&#34;是&#34;| R
+              T --&gt;|&#34;否&#34;| S
+
+              S --&gt; U[&#34;计算阴离子间隙&#34;]
+              U --&gt; V{&#34;AG升高?&#34;}
+              V --&gt;|&#34;是&#34;| W[&#34;高AG代谢性酸中毒&#34;]
+              V --&gt;|&#34;否&#34;| X[&#34;正常AG代谢性酸中毒&#34;]
+
+              style A fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#fff
+              style R fill:#059669,stroke:#047857,stroke-width:2px,color:#fff
+              style S fill:#dc2626,stroke:#b91c1c,stroke-width:2px,color:#fff
+              style W fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff
+              style X fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#fff
+              style B fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style D fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style H fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style L fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style Q fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style T fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+              style V fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                  <span class="inline-block w-8 h-8 bg-blue-600 text-white rounded-full text-center leading-8 mr-3">1</span>
+                  看pH值，定酸血症/碱血症
+                </h3>
+                <div class="space-y-3 text-sm text-gray-700">
+                  <div class="flex items-center">
+                    <i class="fas fa-arrow-down text-red-500 mr-2"></i>
+                    <span>pH &lt; 7.35：酸血症</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-arrow-up text-blue-500 mr-2"></i>
+                    <span>pH &gt; 7.45：碱血症</span>
+                  </div>
+                  <div class="flex items-center">
+                    <i class="fas fa-equals text-green-500 mr-2"></i>
+                    <span>7.35-7.45：正常或混合性</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                  <span class="inline-block w-8 h-8 bg-teal-600 text-white rounded-full text-center leading-8 mr-3">2</span>
+                  看PaCO₂和HCO₃⁻，定原发失衡
+                </h3>
+                <div class="space-y-3 text-sm text-gray-700">
+                  <div class="bg-red-50 p-3 rounded-lg">
+                    <strong class="text-red-800">呼吸性因素：</strong>
+                    <p>PaCO₂改变方向与pH相反时</p>
+                  </div>
+                  <div class="bg-blue-50 p-3 rounded-lg">
+                    <strong class="text-blue-800">代谢性因素：</strong>
+                    <p>HCO₃⁻改变方向与pH相同时</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                  <span class="inline-block w-8 h-8 bg-purple-600 text-white rounded-full text-center leading-8 mr-3">3</span>
+                  计算预期代偿范围
+                </h3>
+                <div class="bg-purple-50 p-4 rounded-lg mb-3">
+                  <p class="font-medium text-purple-800 mb-2">Winter公式：</p>
+                  <p class="text-sm text-purple-700">急性呼吸性酸中毒：预期HCO₃⁻ = 24 + 0.1 × ΔPaCO₂</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-700">
+                  <p><strong>实测 = 预期：</strong>单纯性失衡</p>
+                  <p><strong>实测 ≠ 预期：</strong>混合性失衡</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                  <span class="inline-block w-8 h-8 bg-orange-600 text-white rounded-full text-center leading-8 mr-3">4</span>
+                  计算阴离子间隙
+                </h3>
+                <div class="bg-orange-50 p-4 rounded-lg mb-3">
+                  <p class="font-medium text-orange-800 mb-2">AG = Na⁺ - (Cl⁻ + HCO₃⁻)</p>
+                  <p class="text-sm text-orange-700">正常值：8-16 mmol/L</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-700">
+                  <p><strong>AG升高：</strong>高AG代谢性酸中毒</p>
+                  <p><strong>AG正常：</strong>正常AG（高氯性）酸中毒</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Treatment Guidelines -->
+      <section id="treatment-guidelines" class="mb-16">
+        <div class="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl p-8 mb-8">
+          <h2 class="serif-display text-3xl font-semibold text-gray-800 mb-8 text-center">
+            <i class="fas fa-book-medical mr-3 text-green-600"></i>
+            补碱治疗指南总结
+          </h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                明确的适应证
+              </h3>
+              <div class="space-y-4">
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-green-800 mb-2">慢性肾脏病</h4>
+                  <p class="text-sm text-green-700">CKD 3-5期伴HCO₃⁻持续 &lt; 22 mmol/L</p>
+                </div>
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-blue-800 mb-2">肾小管酸中毒</h4>
+                  <p class="text-sm text-blue-700">各型肾小管酸中毒的常规治疗</p>
+                </div>
+                <div class="bg-purple-50 border-l-4 border-purple-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-purple-800 mb-2">特定治疗目的</h4>
+                  <ul class="text-sm text-purple-700 space-y-1">
+                    <li>• 碱化尿液</li>
+                    <li>• 预防尿酸结石</li>
+                    <li>• 促进毒物排泄</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <h3 class="serif-display text-xl font-semibold mb-4 text-gray-800">
+                <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
+                静脉补碱指征
+              </h3>
+              <div class="space-y-4">
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-red-800 mb-2">严重酸中毒</h4>
+                  <p class="text-sm text-red-700">pH &lt; 7.15-7.20伴血流动力学不稳定</p>
+                </div>
+                <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-orange-800 mb-2">急性肾损伤</h4>
+                  <p class="text-sm text-orange-700">严重代谢性酸中毒的紧急情况</p>
+                </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                  <h4 class="font-semibold text-yellow-800 mb-2">脓毒症休克</h4>
+                  <p class="text-sm text-yellow-700">乳酸酸中毒伴循环衰竭</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+            <h3 class="serif-display text-xl font-semibold mb-6 text-gray-800 text-center">
+              <i class="fas fa-cogs text-blue-600 mr-3"></i>
+              口服碳酸氢钠精细化管理流程
+            </h3>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700">阶段</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700">起始剂量</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700">关键监测</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700">调整策略</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                  <tr class="bg-blue-50">
+                    <td class="px-4 py-3 font-medium text-blue-800">启动期</td>
+                    <td class="px-4 py-3 text-blue-700">0.3-0.5g bid</td>
+                    <td class="px-4 py-3 text-blue-700">基线血气、电解质、体重、BNP</td>
+                    <td class="px-4 py-3 text-blue-700">—</td>
+                  </tr>
+                  <tr class="bg-green-50">
+                    <td class="px-4 py-3 font-medium text-green-800">调整期</td>
+                    <td class="px-4 py-3 text-green-700">维持起始剂量</td>
+                    <td class="px-4 py-3 text-green-700">48小时后复查血气、电解质</td>
+                    <td class="px-4 py-3 text-green-700">
+                      &lt; 22:增量；24-26:维持；&gt;27:减量</td>
+                  </tr>
+                  <tr class="bg-yellow-50">
+                    <td class="px-4 py-3 font-medium text-yellow-800">稳定期</td>
+                    <td class="px-4 py-3 text-yellow-700">根据调整确定</td>
+                    <td class="px-4 py-3 text-yellow-700">1周后全面复查</td>
+                    <td class="px-4 py-3 text-yellow-700">达标后转入维持期</td>
+                  </tr>
+                  <tr class="bg-purple-50">
+                    <td class="px-4 py-3 font-medium text-purple-800">维持期</td>
+                    <td class="px-4 py-3 text-purple-700">最小有效剂量</td>
+                    <td class="px-4 py-3 text-purple-700">每1-3个月监测</td>
+                    <td class="px-4 py-3 text-purple-700">超标时减半或停药</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <h4 class="font-semibold text-amber-800 mb-2">
+                <i class="fas fa-lightbulb mr-2"></i>
+                临床口诀
+              </h4>
+              <p class="text-amber-700 font-medium">&#34;低起点、勤复查、见24就收、见高就停；钠钾水三条线，哪条越界都减半。&#34;</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conclusion -->
+      <section id="conclusion" class="mb-16">
+        <div class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl p-8 text-white">
+          <h2 class="serif-display text-3xl font-semibold mb-8 text-center">
+            <i class="fas fa-lightbulb mr-3 text-yellow-300"></i>
+            核心结论与临床建议
+          </h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <h3 class="serif-display text-xl font-semibold mb-4 text-yellow-300">
+                <i class="fas fa-search mr-2"></i>
+                精准诊断第一
+              </h3>
+              <div class="space-y-3 text-sm">
+                <p>• 治疗血气异常必须先定性后定量</p>
+                <p>• 首要问题是分辨呼吸性还是代谢性</p>
+                <p>• 不能看到pH降低就给予碱剂</p>
+              </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <h3 class="serif-display text-xl font-semibold mb-4 text-green-300">
+                <i class="fas fa-balance-scale mr-2"></i>
+                风险获益平衡
+              </h3>
+              <div class="space-y-3 text-sm">
+                <p>• 慢性代偿与急性失衡区别对待</p>
+                <p>• 在通气问题解决前补碱风险极大</p>
+                <p>• 坚持病理生理学导向的治疗原则</p>
+              </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <h3 class="serif-display text-xl font-semibold mb-4 text-blue-300">
+                <i class="fas fa-user-md mr-2"></i>
+                个体化治疗
+              </h3>
+              <div class="space-y-3 text-sm">
+                <p>• 每项干预都应针对核心病理环节</p>
+                <p>• 充分考虑患者基础疾病和耐受性</p>
+                <p>• 老年患者更需精细风险评估</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
+            <h3 class="serif-display text-2xl font-semibold mb-6 text-center text-yellow-300">
+              <i class="fas fa-graduation-cap mr-2"></i>
+              临床决策要点总结
+            </h3>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="font-semibold text-green-300 mb-4">
+                  <i class="fas fa-check-circle mr-2"></i>
+                  何时考虑补碱？
+                </h4>
+                <div class="space-y-2 text-sm">
+                  <p>✓ 明确的代谢性酸中毒（HCO₃⁻ &lt; 22 mmol/L）</p>
+                      <p>✓ pH &lt; 7.20伴血流动力学不稳定</p>
+                          <p>✓ 慢性肾脏病伴持续性酸中毒</p>
+                          <p>✓ 肾小管酸中毒</p>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold text-red-300 mb-4">
+                  <i class="fas fa-times-circle mr-2"></i>
+                  何时避免补碱？
+                </h4>
+                <div class="space-y-2 text-sm">
+                  <p>✗ 未纠正的呼吸性酸中毒</p>
+                  <p>✗ 心功能不全或容量负荷过重</p>
+                  <p>✗ 严重高钠血症</p>
+                  <p>✗ 组织灌注不良状态</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 text-center">
+              <p class="text-lg font-medium text-white mb-4">
+                <strong>最终临床判断：</strong>
+              </p>
+              <div class="bg-yellow-300/20 backdrop-blur-sm rounded-lg p-4 border border-yellow-300/30">
+                <p class="text-yellow-100 font-medium">
+                  &#34;宁酸勿碱&#34;体现了对酸碱平衡干预的谨慎态度。
+                  治疗决策必须基于精准的病理生理分析，
+                  而非简单地针对数值异常进行纠正。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+        // Initialize Mermaid with enhanced configuration
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                // Primary colors with good contrast
+                primaryColor: '#2563eb',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#1e40af',
+                
+                // Secondary colors
+                secondaryColor: '#f59e0b',
+                secondaryTextColor: '#1e293b',
+                secondaryBorderColor: '#d97706',
+                
+                // Tertiary colors
+                tertiaryColor: '#ef4444',
+                tertiaryTextColor: '#ffffff',
+                tertiaryBorderColor: '#dc2626',
+                
+                // Background and lines
+                background: '#ffffff',
+                lineColor: '#64748b',
+                edgeLabelBackground: '#ffffff',
+                
+                // Node backgrounds with high contrast
+                c0: '#2563eb',  // Blue - white text
+                c1: '#f59e0b',  // Amber - dark text  
+                c2: '#ef4444',  // Red - white text
+                c3: '#059669',  // Green - white text
+                c4: '#7c3aed',  // Purple - white text
+                c5: '#f8fafc',  // Light gray - dark text
+                c6: '#1e293b',  // Dark gray - white text
+                c7: '#ffffff',  // White - dark text
+                
+                // Ensure text contrast
+                nodeBorder: '#334155',
+                clusterBkg: '#f1f5f9',
+                clusterBorder: '#e2e8f0',
+                
+                // Contrast for different node types
+                pie1: '#2563eb',
+                pie2: '#f59e0b', 
+                pie3: '#ef4444',
+                pie4: '#059669',
+                pie5: '#7c3aed',
+                pie6: '#1e293b',
+                pie7: '#f8fafc',
+                pieTitleTextSize: '16px',
+                pieTitleTextColor: '#1e293b',
+                pieSectionTextSize: '14px',
+                pieSectionTextColor: '#ffffff',
+                
+                // Additional contrast improvements
+                git0: '#2563eb',
+                git1: '#f59e0b',
+                git2: '#ef4444',
+                git3: '#059669',
+                git4: '#7c3aed',
+                git5: '#1e293b',
+                git6: '#f8fafc',
+                gitBranchLabel0: '#ffffff',
+                gitBranchLabel1: '#1e293b',
+                gitBranchLabel2: '#ffffff',
+                gitBranchLabel3: '#ffffff',
+                gitBranchLabel4: '#ffffff',
+                gitBranchLabel5: '#1e293b',
+                gitBranchLabel6: '#1e293b'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 30,
+                nodeSpacing: 50,
+                rankSpacing: 80,
+                diagramPadding: 20
+            },
+            fontSize: 14,
+            fontFamily: 'Inter, sans-serif',
+            wrap: true,
+            securityLevel: 'loose'
+        });
+        
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize the mermaid controls after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMermaidControls();
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-fixed a[href^="#"]');
+        
+        function highlightActiveSection() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            tocLinks.forEach(link => {
+                link.classList.remove('bg-blue-100', 'text-blue-800');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('bg-blue-100', 'text-blue-800');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', highlightActiveSection);
+        highlightActiveSection(); // Initial call
+    </script>
+  
+
+</body></html>
